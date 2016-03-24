@@ -15,7 +15,7 @@ while [[ 1 < $# ]]; do
   esac; shift; done
 
 if [ -z $API_NAME ] || [ -z $FUNCTION_NAME ]; then
-  >&2 echo "Requires --name, --function-name, --profile"
+  >&2 echo "Requires --name, --function-name"
   exit 1
 fi
 
@@ -51,9 +51,7 @@ RES_ID=$(
 
 ARGS="--rest-api-id $API_ID --resource-id $RES_ID --http-method POST"
 
-aws apigateway put-method $ARGS \
-    --authorization-type NONE \
-    $PROFILE >/dev/null
+aws apigateway put-method $ARGS --authorization-type NONE $PROFILE >/dev/null
 
 TEMPLATE=$(awk '{gsub ("\"", "\\\"" ); print $0}' ORS='\\n' assets/slack-post.ftl)
 TEMPLATES='{"application/x-www-form-urlencoded":"'"$TEMPLATE"'"}'
@@ -89,6 +87,6 @@ aws apigateway create-stage \
     --stage-name auto \
     --deployment-id $DEPLOYMENT_ID \
     --description initial \
-    $PROFILE 2>/dev/null
+    $PROFILE >/dev/null
 
 echo "url https://$API_ID.execute-api.$REGION.amazonaws.com/auto"

@@ -9,7 +9,7 @@
   (let [opts (apply hash-map opts)
         data {:name        name
               :sanitized   (name-to-path name)
-              :slack-token (opts ":slack-token" "FIXME")}]
+              :slack-token (opts "+slack-token" "FIXME")}]
     (main/info "Generating fresh 'lein new' cljs-lambda-slack-command project.")
     (->files
      data
